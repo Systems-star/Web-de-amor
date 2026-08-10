@@ -176,6 +176,28 @@ export default function Home() {
   const experienceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (revealed) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.overscrollBehavior = "none";
+
+    return () => {
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    };
+  }, [revealed]);
+
+  useEffect(() => {
     if (!revealed) return;
 
     const root = experienceRef.current;
