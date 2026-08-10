@@ -173,14 +173,63 @@ function GalaxyCanvas({ revealed }: { revealed: boolean }) {
 
 export default function Home() {
   const [revealed, setRevealed] = useState(false);
+  const experienceRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!revealed) return;
+
+    const root = experienceRef.current;
+    if (!root) return;
+
+    const clamp = (value: number, limit = 10) => Math.max(-limit, Math.min(limit, value));
+    const applyDepth = (x: number, y: number) => {
+      const tiltX = clamp(x);
+      const tiltY = clamp(y);
+      root.style.setProperty("--depth-x", `${tiltX}px`);
+      root.style.setProperty("--depth-y", `${tiltY}px`);
+      root.style.setProperty("--depth-inverse-x", `${-tiltX * 0.55}px`);
+      root.style.setProperty("--depth-inverse-y", `${-tiltY * 0.55}px`);
+      root.style.setProperty("--depth-rotate-x", `${tiltY * -0.18}deg`);
+      root.style.setProperty("--depth-rotate-y", `${tiltX * 0.18}deg`);
+    };
+
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      if (event.gamma === null || event.beta === null) return;
+      applyDepth(event.gamma / 3.5, (event.beta - 45) / 4.5);
+    };
+
+    const handlePointer = (event: PointerEvent) => {
+      if (event.pointerType && event.pointerType !== "mouse") return;
+      const x = (event.clientX / window.innerWidth - 0.5) * 16;
+      const y = (event.clientY / window.innerHeight - 0.5) * 16;
+      applyDepth(x, y);
+    };
+
+    const resetDepth = () => applyDepth(0, 0);
+    window.addEventListener("deviceorientation", handleOrientation, true);
+    window.addEventListener("pointermove", handlePointer, { passive: true });
+    document.documentElement.addEventListener("mouseleave", resetDepth);
+
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation, true);
+      window.removeEventListener("pointermove", handlePointer);
+      document.documentElement.removeEventListener("mouseleave", resetDepth);
+    };
+  }, [revealed]);
 
   const openSurprise = () => {
     setRevealed(true);
+    const orientationEvent = DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+      requestPermission?: () => Promise<"granted" | "denied">;
+    };
+    if (typeof orientationEvent.requestPermission === "function") {
+      void orientationEvent.requestPermission().catch(() => undefined);
+    }
     window.setTimeout(() => document.querySelector("main")?.focus(), 700);
   };
 
   return (
-    <div className={`experience ${revealed ? "is-revealed" : ""}`}>
+    <div ref={experienceRef} className={`experience ${revealed ? "is-revealed" : ""}`}>
       <GalaxyCanvas revealed={revealed} />
 
       <div className="intro" aria-hidden={revealed}>
@@ -224,12 +273,12 @@ export default function Home() {
             <span>✦</span>
             <p>Entre millones de estrellas,<br />siempre te elegiría a ti.</p>
           </div>
-          <span className="side-label" aria-hidden="true">NUESTRA GALAXIA · 2026</span>
+          <span className="side-label" aria-hidden="true">11 DE JULIO DE 2026</span>
         </section>
 
         <section id="mensajes" className="messages" aria-labelledby="messages-title">
           <header className="section-heading">
-            <p className="eyebrow"><span /> Constelaciones de amor</p>
+            <p className="eyebrow"><span /> Suspiros escritos para ti</p>
             <h2 id="messages-title">Todo lo bonito<br />me lleva a <em>ti.</em></h2>
           </header>
 
