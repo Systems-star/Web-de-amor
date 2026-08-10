@@ -256,7 +256,7 @@ export default function Home() {
         </section>
 
         <footer>
-          <p>Hecho con amor, estrellas y un poquito de magia.</p>
+          <p>HECHO CON AMOR DE J.COCHACHI</p>
           <span>Para Yeckis · Siempre</span>
         </footer>
       </main>
