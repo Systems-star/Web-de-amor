@@ -241,6 +241,47 @@ main {
   letter-spacing: -.045em;
 }
 .hero h2 em, .section-heading h2 em { color: var(--rose); font-weight: 400; }
+.starlit-title {
+  position: relative;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, .18),
+    0 0 24px rgba(206, 176, 242, .11);
+  animation: letterStarlight 4.6s ease-in-out infinite;
+}
+.starlit-title::before,
+.starlit-title::after {
+  position: absolute;
+  z-index: 2;
+  color: #fff;
+  font-family: var(--font-sans), sans-serif;
+  font-style: normal;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 0 7px #fff, 0 0 18px #c8a7f1, 0 0 32px #9c6dd1;
+  animation: titleSparkle 2.8s ease-in-out infinite;
+}
+.starlit-title::before {
+  content: "✦";
+  top: -.08em;
+  left: 68%;
+  font-size: .16em;
+}
+.starlit-title::after {
+  content: "✧";
+  bottom: .08em;
+  left: 18%;
+  font-size: .2em;
+  animation-delay: 1.35s;
+}
+.hero h2.starlit-title em {
+  color: transparent;
+  background: linear-gradient(105deg, #d9afc6 15%, #fff7ff 40%, #cba4d9 58%, #efc7d9 82%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(231, 190, 222, .28));
+  animation: stellarSweep 5s linear infinite;
+}
 .hero-note { max-width: 525px; margin: 0; padding-left: 1px; color: var(--muted); font-family: var(--font-display), serif; font-size: clamp(17px, 1.5vw, 21px); line-height: 1.55; }
 .continue-link { display: inline-flex; align-items: center; gap: 20px; margin-top: 40px; padding-bottom: 7px; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); color: #eee8f4; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
 .continue-link span { color: var(--lavender); font-size: 15px; }
@@ -297,6 +338,16 @@ footer { min-height: 90px; display: flex; align-items: center; justify-content: 
 
 @keyframes introTwinkle { to { opacity: .28; transform: scale(.7); } }
 @keyframes orbit { to { transform: rotate(345deg); } }
+@keyframes letterStarlight {
+  0%, 100% { text-shadow: 0 0 8px rgba(255,255,255,.15), 0 0 22px rgba(206,176,242,.1); }
+  50% { text-shadow: 0 0 11px rgba(255,255,255,.28), 0 0 34px rgba(206,176,242,.2); }
+}
+@keyframes titleSparkle {
+  0%, 100% { opacity: .18; transform: scale(.55) rotate(0deg); }
+  45% { opacity: 1; transform: scale(1.12) rotate(42deg); }
+  70% { opacity: .4; transform: scale(.75) rotate(70deg); }
+}
+@keyframes stellarSweep { to { background-position: -220% center; } }
 
 @media (max-width: 900px) {
   .topbar { grid-template-columns: 1fr auto; }

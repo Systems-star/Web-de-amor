@@ -282,7 +282,7 @@ export default function Home() {
         <section id="inicio" className="hero" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow"><span /> Para mi persona favorita</p>
-            <h2 id="hero-title">Yeckis, tú eres<br />mi <em>universo</em> favorito.</h2>
+            <h2 id="hero-title" className="starlit-title">Tú eres mi<br /><em>universo</em> favorito.</h2>
             <p className="hero-note">
               Si pudiera regalarte algo, te regalaría la forma en la que te veo: llena de luz,
               infinita y absolutamente extraordinaria.
