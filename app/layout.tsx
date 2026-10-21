@@ -25,7 +25,10 @@ const sans = Manrope({
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const requestedHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "";
-  const productionHost = "galaxia-para-yeckis.jolly-perch-8014.chatgpt.site";
+  const productionHost =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL ??
+    "galaxia-para-yeckis.jolly-perch-8014.chatgpt.site";
   const isLocalHost = /^(localhost|127\.0\.0\.1)(:\d{1,5})?$/.test(requestedHost);
   const host = requestedHost === productionHost || isLocalHost ? requestedHost : productionHost;
   const protocol = isLocalHost ? "http" : "https";
